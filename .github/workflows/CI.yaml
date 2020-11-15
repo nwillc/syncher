@@ -20,10 +20,10 @@ jobs:
         go get -u golang.org/x/lint/golint
 
     - name: Test
-        run: go test -v ./...
+      run: go test -v ./...
 
     - name: Run Vet & Lint
-        run: |
-          go vet .
-          golint -set_exit_status=1 .
+      run: |
+        go vet .
+        golint -set_exit_status=1 .
 
