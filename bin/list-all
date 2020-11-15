@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+#
+# Copyright (c) 2020, nwillc@gmail.com
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+
+set \
+  -o nounset \
+  -o pipefail \
+  -o errexit
+
+tag_url=https://api.github.com/repos/nwillc/asdf-bootstrap/tags
+
+cmd="curl -sSL"
+if [ -n "${GITHUB_API_TOKEN:-}" ]; then
+  cmd="$cmd -H 'Authorization: token $GITHUB_API_TOKEN'"
+fi
+cmd="$cmd $tag_url"
+
+function sort_versions() {
+    LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n
+}
+
+versions=$(curl -s ${tag_url} | grep name | cut -d '"' -f4 | tr -d 'v' | sort_versions | tr "\n" " ")
+echo ${versions}
