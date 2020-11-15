@@ -18,31 +18,32 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
+	"github/nwillc/asdf-bootstrap/gen/version"
 	"log"
 	"os"
 	"strings"
 )
 
 func main() {
-	const versionFile = ".tool-versions"
+	flag.Parse()
+
+	if *flags.version {
+		fmt.Println("version", version.Version)
+		os.Exit(0)
+	}
 
 	home, _ := os.UserHomeDir()
 	var pluginsDir = home + "/.asdf/plugins/"
 
-	fd, err := os.Open(versionFile)
+	fd, err := os.Open(*flags.input)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer fd.Close()
 
-	scanner := lineScanner(fd)
-
-	var text []string
-
-	for scanner.Scan() {
-		text = append(text, scanner.Text())
-	}
+	text := lines(fd)
 
 	fmt.Println("#!/bin/bash")
 	for _, line := range text {
@@ -54,13 +55,13 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		scanner = lineScanner(config)
+		lines := lines(config)
 		var url string
-		for scanner.Scan() {
-			line := scanner.Text()
+		for _, line := range lines {
 			if strings.Contains(line, "url =") {
 				parts = strings.Split(line, " = ")
 				url = parts[1]
+				break
 			}
 		}
 		if url != "" {
@@ -72,8 +73,13 @@ func main() {
 	}
 }
 
-func lineScanner(file *os.File) *bufio.Scanner {
+func lines(file *os.File) []string {
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
-	return scanner
+	var text []string
+
+	for scanner.Scan() {
+		text = append(text, scanner.Text())
+	}
+	return text
 }
