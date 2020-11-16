@@ -1,6 +1,6 @@
 # Test binary, built with `go test -c`
 *.test
+syncher
 asdf-bootstrap
-asdf-bootstrap.zip
 .idea
 *.iml

@@ -1,3 +1,3 @@
-module github/nwillc/asdf-bootstrap
+module github/nwillc/syncher
 
 go 1.15

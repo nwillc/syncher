@@ -19,16 +19,16 @@ jobs:
       run: go version
 
     - name: Build OSX
-      run: GOOS=darwin GOARCH=amd64 go build
+      run: GOOS=darwin GOARCH=amd64 go build -o syncher
 
     - name: Create OSX asset
-      run: zip -j -r asdf-bootstrap_darwin_amd64.zip asdf-bootstrap
+      run: zip -j -r syncher_darwin_amd64.zip syncher
 
     - name: Build Linux
-      run: GOOS=linux GOARCH=amd64 go build
+      run: GOOS=linux GOARCH=amd64 go build -o syncher
 
     - name: Create OSX asset
-      run: zip -j -r asdf-bootstrap_linux_amd64.zip asdf-bootstrap
+      run: zip -j -r syncher_linux_amd64.zip syncher
 
     - name: Create Release
       id: create_release
@@ -48,8 +48,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./asdf-bootstrap_darwin_amd64.zip
-        asset_name: asdf-bootstrap_darwin_amd64.zip
+        asset_path: ./syncher_darwin_amd64.zip
+        asset_name: syncher_darwin_amd64.zip
         asset_content_type: application/zip
 
     - name: Upload Linux Asset
@@ -59,6 +59,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./asdf-bootstrap_linux_amd64.zip
-        asset_name: asdf-bootstrap_linux_amd64.zip
+        asset_path: ./syncher_linux_amd64.zip
+        asset_name: syncher_linux_amd64.zip
         asset_content_type: application/zip

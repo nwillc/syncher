@@ -28,10 +28,10 @@ install_tool() {
   local binary_name=$4
   local platform=$(uname | tr '[:upper:]' '[:lower:]')
   local arch=amd64
-  local file_name="asdf-bootstrap_${platform}_${arch}.zip"
+  local file_name="${binary_name}_${platform}_${arch}.zip"
   local bin_install_path="${install_path}/bin"
   local binary_path="${bin_install_path}/${binary_name}"
-  local download_url=https://github.com/nwillc/asdf-bootstrap/releases/download/${version}/${file_name}
+  local download_url=https://github.com/nwillc/${binary_name}/releases/download/${version}/${file_name}
   local download_path="${tmp_download_dir}/${file_name}"
 
   echo "Downloading ${version} ${file_name}"
@@ -54,4 +54,4 @@ install_tool() {
 tmp_download_dir="$(mktemp -d -t 'asdf_XXXXXXXX')"
 trap 'rm -rf "${tmp_download_dir}"' EXIT
 
-install_tool "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH" "$tmp_download_dir" asdf-bootstrap
+install_tool "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH" "$tmp_download_dir" syncher

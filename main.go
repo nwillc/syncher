@@ -20,7 +20,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"github/nwillc/asdf-bootstrap/gen/version"
+	"github/nwillc/syncher/gen/version"
 	"log"
 	"os"
 	"strings"
