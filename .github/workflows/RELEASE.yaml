@@ -21,8 +21,14 @@ jobs:
     - name: Build OSX
       run: GOOS=darwin GOARCH=amd64 go build
 
-    - name: Create asset
-      run: zip -j -r asdf-bootstrap.zip asdf-bootstrap
+    - name: Create OSX asset
+      run: zip -j -r asdf-bootstrap-darwin-amd64.zip asdf-bootstrap
+
+    - name: Build Linux
+      run: GOOS=linux GOARCH=amd64 go build
+
+    - name: Create OSX asset
+      run: zip -j -r asdf-bootstrap-linux-amd64.zip asdf-bootstrap
 
     - name: Create Release
       id: create_release
@@ -35,13 +41,24 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Release Asset
-      id: upload-release-asset
+    - name: Upload OSX Asset
+      id: upload-OSX-asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./asdf-bootstrap.zip
-        asset_name: asdf-bootstrap.zip
+        asset_path: ./asdf-bootstrap-darwin-amd64.zip
+        asset_name: asdf-bootstrap-darwin-amd64.zip
+        asset_content_type: application/zip
+
+    - name: Upload Linux Asset
+      id: upload-OSX-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ./asdf-bootstrap-linux-amd64.zip
+        asset_name: asdf-bootstrap-linux-amd64.zip
         asset_content_type: application/zip
