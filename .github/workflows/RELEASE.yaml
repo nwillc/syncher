@@ -22,7 +22,7 @@ jobs:
       run: GOOS=darwin GOARCH=amd64 go build
 
     - name: Create asset
-      run: zip --junk-paths asdf-bootstrap
+      run: zip -j -r asdf-bootstrap.zip asdf-bootstrap
 
     - name: Create Release
       id: create_release
