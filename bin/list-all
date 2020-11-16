@@ -21,7 +21,7 @@ set \
   -o pipefail \
   -o errexit
 
-tag_url=https://api.github.com/repos/nwillc/asdf-bootstrap/tags
+tag_url=https://api.github.com/repos/nwillc/asdf-bootstrap/releases
 
 cmd="curl -sSL"
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
@@ -33,5 +33,5 @@ function sort_versions() {
     LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n
 }
 
-versions=$(curl -s ${tag_url} | grep name | cut -d '"' -f4 | tr -d 'v' | sort_versions | tr "\n" " ")
+versions=$(curl -s ${tag_url} | grep tag_name | cut -d '"' -f4 | tr -d 'v' | sort_versions | tr "\n" " ")
 echo ${versions}
