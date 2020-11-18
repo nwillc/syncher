@@ -15,10 +15,13 @@ versions.
 # Usage
 
 ```bash
+# Initial setup
 asdf plugin-add syncher https://github.com/nwillc/syncher.git
 asdf install syncher $(asdf list all syncher | tail -1)
 asdf global syncher $(asdf list all syncher | tail -1)
 asdf reshim syncher
+
+# Use going forward
 asdf syncher
 ```
 
