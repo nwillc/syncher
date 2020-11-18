@@ -57,7 +57,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
-        upload_url: ${{ needs.release.steps.create_release.outputs.upload_url }}
+        upload_url: ${{ needs.release.outputs.upload_url }}
         asset_path: ./syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}.zip
         asset_name: syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}.zip
         asset_content_type: application/zip
