@@ -21,21 +21,47 @@ set \
   -o pipefail \
   -o errexit
 
+get_platform() {
+  echo -n "$(uname | tr '[:upper:]' '[:lower:]')"
+}
+
+get_arch() {
+    local arch=""
+
+    case "$(uname -m)" in
+        x86_64|amd64) arch="amd64"; ;;
+        i686|i386) arch="i386"; ;;
+    esac
+
+    echo -n $arch
+}
+
 install_tool() {
   local version=v$1
   local install_path=$2
   local tmp_download_dir=$3
   local binary_name=$4
-  local platform=$(uname | tr '[:upper:]' '[:lower:]')
-  local arch=amd64
-  local file_name="${binary_name}_${platform}_${arch}.zip"
+  local dist=""
+
+  dist="$(get_platform)_$(get_arch)"
+
+  case "${dist}" in
+    darwin_amd64|linux_amd64|linux_i386) ;;
+    *)
+      echo "No distribution for ${dist} available."
+      exit 1
+  esac
+
+  local file_name="${binary_name}_${dist}.zip"
   local bin_install_path="${install_path}/bin"
   local binary_path="${bin_install_path}/${binary_name}"
-  local download_url=https://github.com/nwillc/${binary_name}/releases/download/${version}/${file_name}
+  local download_url="https://github.com/nwillc/${binary_name}/releases/download/${version}/${file_name}"
   local download_path="${tmp_download_dir}/${file_name}"
 
+
+
   echo "Downloading ${version} ${file_name}"
-  curl -Lo ${download_path} ${download_url}
+  curl -Lo "${download_path}" "${download_url}"
 
   echo "Creating bin directory: ${bin_install_path}"
   mkdir -p "${bin_install_path}"
@@ -44,7 +70,7 @@ install_tool() {
   rm -f "${binary_path}" 2>/dev/null || true
 
   echo "Extracting archive: ${tmp_download_dir}"
-  (cd ${tmp_download_dir} ; unzip ${file_name} )
+  (cd "${tmp_download_dir}" ; unzip "${file_name}" )
 
   echo "Copying binary: ${binary_name}"
   cp "${tmp_download_dir}/${binary_name}" "${bin_install_path}"

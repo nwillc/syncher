@@ -1,5 +1,5 @@
 [![license](https://img.shields.io/github/license/nwillc/syncher.svg)](https://tldrlegal.com/license/-isc-license)
-[![CI](https://github.com/nwillc/syncher/workflows/CI/badge.svg)](https://github.com/nwillc/syncher/actions?query=workflow%3CI)
+[![CI](https://github.com/nwillc/syncher/workflows/CI/badge.svg?branch=master)](https://github.com/nwillc/syncher/actions?query=workflow%3CI)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nwillc/syncher)](https://goreportcard.com/report/github.com/nwillc/syncher)
 -----
 # asdf syncher
