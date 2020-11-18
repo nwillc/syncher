@@ -16,9 +16,8 @@ versions.
 
 ```bash
 asdf plugin-add syncher https://github.com/nwillc/syncher.git
-asdf list all syncher
-asdf install syncher x.y.z
-asdf global syncher x.y.z
+asdf install syncher $(asdf list all syncher | tail -1)
+asdf global syncher $(asdf list all syncher | tail -1)
 asdf reshim syncher
 asdf syncher
 ```
