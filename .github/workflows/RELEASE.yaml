@@ -14,19 +14,19 @@ jobs:
       matrix:
         target: [{ 'os': 'darwin', 'target': 'amd64'}, { 'os': 'linux', 'target': 'amd64'}, { 'os': 'linux', 'target': '386'}]
 
-      steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
-        with:
-          go-version: '1.15.3'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '1.15.3'
 
-      - name: Install dependencies
-        run: go version
+    - name: Install dependencies
+      run: go version
 
-      - name: Create asset
-        run: |
-          GOOS=${{ matrix.target.os }} GOARCH=${{ matrix.target.arch }} go build -o syncher
-          zip -j -r syncher_${{ matrix.target.os }}_${{ matrix.target.os }}.zip syncher
+    - name: Create asset
+      run: |
+        GOOS=${{ matrix.target.os }} GOARCH=${{ matrix.target.arch }} go build -o syncher
+        zip -j -r syncher_${{ matrix.target.os }}_${{ matrix.target.os }}.zip syncher
 
   release:
     runs-on: ubuntu-latest
