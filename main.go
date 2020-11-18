@@ -90,8 +90,8 @@ func pairs(reader io.Reader) []pair {
 	scanner.Split(bufio.ScanLines)
 	var pairs []pair
 	for scanner.Scan() {
-		parts := strings.Fields(scanner.Text())
-		pairs = append(pairs, pair{a: parts[0], b: parts[1]})
+		fields := strings.Fields(scanner.Text())
+		pairs = append(pairs, pair{a: fields[0], b: fields[1]})
 	}
 	return pairs
 }

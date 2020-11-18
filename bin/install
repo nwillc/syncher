@@ -58,8 +58,6 @@ install_tool() {
   local download_url="https://github.com/nwillc/${binary_name}/releases/download/${version}/${file_name}"
   local download_path="${tmp_download_dir}/${file_name}"
 
-
-
   echo "Downloading ${version} ${file_name}"
   curl -Lo "${download_path}" "${download_url}"
 
