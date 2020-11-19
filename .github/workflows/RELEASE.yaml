@@ -6,7 +6,7 @@ on:
 name: Upload Release Asset
 
 jobs:
-  build:
+  artifacts:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,13 @@ jobs:
     - name: Create Linux i386 asset
       run: |
         GOOS=linux GOARCH=386 go build -o syncher
-        zip -j -r syncher_linux_i386.zip syncher
+        zip -j -r syncher_linux_386.zip syncher
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
 
     - name: Create Release
       id: create_release
@@ -49,7 +55,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./syncher_darwin_amd64.zip
         asset_name: syncher_darwin_amd64.zip
         asset_content_type: application/zip
@@ -59,7 +65,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./syncher_linux_amd64.zip
         asset_name: syncher_linux_amd64.zip
         asset_content_type: application/zip
@@ -69,7 +75,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./syncher_linux_i386.zip
-        asset_name: syncher_linux_i386.zip
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./syncher_linux_386.zip
+        asset_name: syncher_linux_386.zip
         asset_content_type: application/zip
