@@ -71,8 +71,8 @@ jobs:
 
     - name: Download syncher_darwin_amd64
       uses: actions/download-artifact@v2
-        with:
-          name: syncher_darwin_amd64
+      with:
+        name: syncher_darwin_amd64
 
     - name: Release syncher_darwin_amd64
       uses: actions/upload-release-asset@v1
@@ -86,8 +86,8 @@ jobs:
 
     - name: Download syncher_linux_amd64
       uses: actions/download-artifact@v2
-        with:
-          name: syncher_linux_amd64
+      with:
+        name: syncher_linux_amd64
 
     - name: Release syncher_linux_amd64
       uses: actions/upload-release-asset@v1
@@ -101,8 +101,8 @@ jobs:
 
     - name: Download syncher_linux_386
       uses: actions/download-artifact@v2
-        with:
-          name: syncher_linux_386
+      with:
+        name: syncher_linux_386
 
     - name: Release syncher_linux_386
       uses: actions/upload-release-asset@v1
