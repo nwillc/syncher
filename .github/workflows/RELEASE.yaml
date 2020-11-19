@@ -18,20 +18,38 @@ jobs:
     - name: Install dependencies
       run: go version
 
-    - name: Create Darwin amd64 asset
+    - name: Create syncher_darwin_amd64
       run: |
         GOOS=darwin GOARCH=amd64 go build -o syncher
         zip -j -r syncher_darwin_amd64.zip syncher
 
-    - name: Create Linux amd64 asset
+    - name: Upload syncher_darwin_amd64
+      uses: actions/upload-artifact@v2
+      with:
+        name: syncher_darwin_amd64
+        path: syncher_darwin_amd64.zip
+
+    - name: Create syncher_linux_amd64
       run: |
         GOOS=linux GOARCH=amd64 go build -o syncher
         zip -j -r syncher_linux_amd64.zip syncher
 
-    - name: Create Linux i386 asset
+    - name: Upload syncher_linux_amd64
+      uses: actions/upload-artifact@v2
+      with:
+        name: syncher_linux_amd64
+        path: syncher_linux_amd64.zip
+
+    - name: Create syncher_linux_386
       run: |
         GOOS=linux GOARCH=386 go build -o syncher
         zip -j -r syncher_linux_386.zip syncher
+
+    - name: Upload syncher_linux_386
+      uses: actions/upload-artifact@v2
+      with:
+        name: syncher_linux_386
+        path: syncher_linux_386.zip
 
   release:
     runs-on: ubuntu-latest
@@ -51,7 +69,12 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Darwin amd64 Asset
+    - name: Download syncher_darwin_amd64
+      uses: actions/download-artifact@v2
+        with:
+          name: syncher_darwin_amd64
+
+    - name: Release syncher_darwin_amd64
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -61,7 +84,12 @@ jobs:
         asset_name: syncher_darwin_amd64.zip
         asset_content_type: application/zip
 
-    - name: Upload Linux amd64 Asset
+    - name: Download syncher_linux_amd64
+      uses: actions/download-artifact@v2
+        with:
+          name: syncher_linux_amd64
+
+    - name: Release syncher_linux_amd64
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -71,7 +99,12 @@ jobs:
         asset_name: syncher_linux_amd64.zip
         asset_content_type: application/zip
 
-    - name: Upload Linux i386 Asset
+    - name: Download syncher_linux_386
+      uses: actions/download-artifact@v2
+        with:
+          name: syncher_linux_386
+
+    - name: Release syncher_linux_386
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
