@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [{ 'os': 'darwin', 'target': 'amd64'}, { 'os': 'linux', 'target': 'amd64'}, { 'os': 'linux', 'target': '386'}]
+        target: [{ 'os': 'darwin', 'arch': 'amd64'}, { 'os': 'linux', 'arch': 'amd64'}, { 'os': 'linux', 'arch': '386'}]
 
     steps:
     - uses: actions/checkout@v2
