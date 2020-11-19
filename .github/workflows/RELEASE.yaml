@@ -1,18 +1,13 @@
 on:
   push:
-    branches:
-      - master
     tags:
     - 'v*'
 
 name: Upload Release Asset
 
 jobs:
-  packages:
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target: [{ 'os': 'darwin', 'target': 'amd64'}, { 'os': 'linux', 'target': 'amd64'}, { 'os': 'linux', 'target': '386'}]
 
     steps:
     - uses: actions/checkout@v2
@@ -23,16 +18,21 @@ jobs:
     - name: Install dependencies
       run: go version
 
-    - name: Create asset
+    - name: Create Darwin amd64 asset
       run: |
-        GOOS=${{ matrix.target.os }} GOARCH=${{ matrix.target.arch }} go build -o syncher
-        zip -j -r syncher_${{ matrix.target.os }}_${{ matrix.target.os }}.zip syncher
+        GOOS=darwin GOARCH=amd64 go build -o syncher
+        zip -j -r syncher_darwin_amd64.zip syncher
 
-  release:
-    runs-on: ubuntu-latest
-    needs: packages
+    - name: Create Linux amd64 asset
+      run: |
+        GOOS=linux GOARCH=amd64 go build -o syncher
+        zip -j -r syncher_linux_amd64.zip syncher
 
-    steps:
+    - name: Create Linux i386 asset
+      run: |
+        GOOS=linux GOARCH=386 go build -o syncher
+        zip -j -r syncher_linux_i386.zip syncher
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -44,21 +44,32 @@ jobs:
         draft: false
         prerelease: false
 
-  upload:
-    runs-on: ubuntu-latest
-    needs: [packages, release]
-    strategy:
-      matrix:
-        target: [{ 'os': 'darwin', 'target': 'amd64'}, { 'os': 'linux', 'target': 'amd64'}, { 'os': 'linux', 'target': '386'}]
-
-    steps:
-    - name: Upload Asset
+    - name: Upload Darwin amd64 Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: ./syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}.zip
-        asset_name: syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}.zip
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ./syncher_darwin_amd64.zip
+        asset_name: syncher_darwin_amd64.zip
         asset_content_type: application/zip
 
+    - name: Upload Linux amd64 Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ./syncher_linux_amd64.zip
+        asset_name: syncher_linux_amd64.zip
+        asset_content_type: application/zip
+
+    - name: Upload Linux i386 Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ./syncher_linux_i386.zip
+        asset_name: syncher_linux_i386.zip
+        asset_content_type: application/zip
