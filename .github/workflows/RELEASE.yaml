@@ -8,6 +8,9 @@ name: Upload Release Asset
 jobs:
   artifacts:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [{ 'os': 'darwin', 'target': 'amd64'}, { 'os': 'linux', 'target': 'amd64'}, { 'os': 'linux', 'target': '386'}]
 
     steps:
     - uses: actions/checkout@v2
@@ -18,38 +21,16 @@ jobs:
     - name: Install dependencies
       run: go version
 
-    - name: Create syncher_darwin_amd64
+    - name: Create Artifact
       run: |
-        GOOS=darwin GOARCH=amd64 go build -o syncher
-        zip -j -r syncher_darwin_amd64.zip syncher
+        GOOS=${{ matrix.target.os }} GOARCH=${{ matrix.target.arch }} go build -o syncher
+        zip -j -r syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}.zip syncher
 
-    - name: Upload syncher_darwin_amd64
+    - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: syncher_darwin_amd64
-        path: syncher_darwin_amd64.zip
-
-    - name: Create syncher_linux_amd64
-      run: |
-        GOOS=linux GOARCH=amd64 go build -o syncher
-        zip -j -r syncher_linux_amd64.zip syncher
-
-    - name: Upload syncher_linux_amd64
-      uses: actions/upload-artifact@v2
-      with:
-        name: syncher_linux_amd64
-        path: syncher_linux_amd64.zip
-
-    - name: Create syncher_linux_386
-      run: |
-        GOOS=linux GOARCH=386 go build -o syncher
-        zip -j -r syncher_linux_386.zip syncher
-
-    - name: Upload syncher_linux_386
-      uses: actions/upload-artifact@v2
-      with:
-        name: syncher_linux_386
-        path: syncher_linux_386.zip
+        name: syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}
+        path: syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}.zip
 
   release:
     runs-on: ubuntu-latest
