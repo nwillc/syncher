@@ -54,7 +54,7 @@ jobs:
         draft: false
         prerelease: false
   # Add all the builds as assets to the release
-  upload:
+  add:
     runs-on: ubuntu-latest
     needs: [ artifacts, release ]
     strategy:
@@ -78,4 +78,4 @@ jobs:
         asset_path: ./syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}.zip
         asset_name: syncher_${{ matrix.target.os }}_${{ matrix.target.arch }}.zip
         asset_content_type: application/zip
-        
+
