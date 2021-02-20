@@ -26,3 +26,9 @@ asdf syncher
 ```
 
 The output from `asdf syncher` will be a shell script that syncs up the plugins and installations.
+
+# Architectures Released
+The releases are available for:
+
+ - darwin (OSX): amd64, arm64
+ - linux: amd64, 386
