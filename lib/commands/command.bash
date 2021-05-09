@@ -22,4 +22,4 @@ set \
   -o pipefail \
   -o errexit
 
-$ASDF_USER_SHIMS/syncher
+${ASDF_USER_SHIMS:-${ASDF_DIR}/shims}/syncher
